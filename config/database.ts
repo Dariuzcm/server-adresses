@@ -28,6 +28,8 @@ const dbConfig = defineConfig({
         options: {
           encrypt: false,
           trustServerCertificate: true,
+          trustedConnection: true,
+          multiSubnetFailover: false,
         },
       },
     },
