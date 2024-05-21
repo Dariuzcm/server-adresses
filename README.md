@@ -26,7 +26,7 @@
   - node ace db:seed
 - Si gusta puede crear el proyecto construido con   
     ```
-        npm install
+        npm run build
     ``` 
     el cual construira el projecto en la carpeta dist
   - En ese caso debe copiar el archivo .env de configuracion al directorio build
