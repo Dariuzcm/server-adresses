@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').primary()
       table.string('cp', 9).notNullable()
       table.string('calle', 100).notNullable()
-      table.string('colonia', 6).notNullable()
+      table.string('colonia', 6)
 
       table.foreign('cp').references('codigo_postal.cp')
       table.foreign('colonia').references('clave')

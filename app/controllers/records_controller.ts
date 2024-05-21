@@ -7,17 +7,20 @@ import logger from '@adonisjs/core/services/logger'
 export default class RecordsController {
   async getAll({ request, response }: HttpContext) {
     const { page = 1, size = 25 } = request.params()
-
-    const records = await Record.query().orderBy('id', 'desc').paginate(page, size)
-    const cp = records.map((record) => record.cp)
-    const colonias = await Colonia.query()
-      .whereIn(
-        'clave',
-        records.map((record) => record.colonia)
-      )
-      .whereIn('cp', cp)
-    const codigosPostales = await CodigoPostal.query().whereIn('cp', cp)
-    return response.ok({ records, colonias, codigosPostales })
+    try {
+      const records = await Record.query().orderBy('id', 'desc').paginate(page, size)
+      const cp = records.map((record) => record.cp)
+      const colonias = await Colonia.query()
+        .whereIn(
+          'clave',
+          records.map((record) => record.colonia)
+        )
+        .whereIn('cp', cp)
+      const codigosPostales = await CodigoPostal.query().whereIn('cp', cp)
+      return response.ok({ records, colonias, codigosPostales })
+    } catch (error) {
+      response.abort(error)
+    }
   }
 
   async createRecord({ request, response }: HttpContext) {
@@ -34,7 +37,7 @@ export default class RecordsController {
       await record.refresh()
       await record.load('codigoPostal')
       await record.load('coloniaRecord')
-      logger.info(record, 'Record created')
+      logger.info(record.serialize(), 'Record created')
       return response.created(record)
     } catch (error) {
       logger.error(error, 'Some error happends on create record')
@@ -63,11 +66,13 @@ export default class RecordsController {
   }
 
   async deleteRecord({ request, response }: HttpContext) {
-    const { id } = request.param('id')
-    const record = await Record.findByOrFail('id', id)
+    const { id } = request.params()
+    if (!Number(id)) return response.abort('Id is not a number')
+
+    const record = await Record.findByOrFail('id', Number(id))
     try {
-      record.delete()
-      response.noContent()
+      await record.delete()
+      return response.noContent()
     } catch (error) {
       logger.error(error, 'Some error happends on deleting record')
       response.abort(error)
