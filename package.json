@@ -59,6 +59,8 @@
     "better-sqlite3": "^10.0.0",
     "luxon": "^3.4.4",
     "mssql": "^10.0.2",
+    "mysql2": "^3.9.8",
+    "pg": "^8.11.5",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
