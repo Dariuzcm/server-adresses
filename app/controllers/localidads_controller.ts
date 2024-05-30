@@ -18,7 +18,7 @@ export default class LocalidadsController {
         .where('codigo_postal.estado', estado)
         .andWhere('codigo_postal.municipio', municipioClave)
 
-      logger.info('Getting municipios by ' + municipioClave)
+      logger.info('Getting municipios by ' + municipioClave + 'and estado ' + estado)
       return response.ok(municipios)
     } catch (error) {
       response.abort(error.message + 'Error happend on LocalidadsController.getMunicipio')
