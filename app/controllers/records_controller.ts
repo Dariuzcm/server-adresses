@@ -9,15 +9,18 @@ export default class RecordsController {
     const { page = 1, size = 25 } = request.params()
     try {
       const records = await Record.query().orderBy('id', 'desc').paginate(page, size)
-      const cp = records.map((record) => record.cp)
-      const colonias = await Colonia.query()
-        .whereIn(
-          'clave',
-          records.map((record) => record.colonia)
-        )
-        .whereIn('cp', cp)
-      const codigosPostales = await CodigoPostal.query().whereIn('cp', cp)
-      return response.ok({ records, colonias, codigosPostales })
+      if (records.total > 0) {
+        const cp = records.map((record) => record.cp)
+        const colonias = await Colonia.query()
+          .whereIn(
+            'clave',
+            records.map((record) => record.colonia)
+          )
+          .whereIn('cp', cp)
+        const codigosPostales = await CodigoPostal.query().whereIn('cp', cp)
+        return response.ok({ records, colonias, codigosPostales })
+      }
+      return response.noContent()
     } catch (error) {
       response.abort(error)
     }
