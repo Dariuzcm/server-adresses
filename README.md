@@ -36,6 +36,7 @@
   ```
   node ace migration:run
   ```
+  -- Para que funcione correctamente tiene la base de datos tiene que existir en el gestor de db
 - Una vez realizada la configuracion del _.env_ realice la ejecucion de los seeders, tardara unos minutos
   - node ace db:seed
 - Si gusta puede crear el proyecto construido con
